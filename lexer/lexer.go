@@ -4,6 +4,7 @@ import "layng/token"
 
 // TODO: Use io.Reader instead of string for input in order to take source code from file
 // TODO: Support the use of full Unicode (rework characters reading)
+// TODO: Support float numbers
 
 type Lexer struct {
 	input        string
@@ -14,14 +15,14 @@ type Lexer struct {
 
 /* ---------- EXPORTED FUNCTIONS ---------- */
 
-// Lexer constructor
+// New Lexer constructor
 func New(input string) *Lexer {
 	l := &Lexer{input: input}
 	l.readChar()
 	return l
 }
 
-// Reads the next token and returns it
+// NextToken Reads the next token and returns it
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
 
@@ -29,7 +30,35 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.currentChar {
 	case '=':
-		tok = newToken(token.ASSIGN, l.currentChar)
+		if l.peekChar() == '=' {
+			ch := l.currentChar
+			l.readChar()
+			literal := string(ch) + string(l.currentChar)
+			tok = token.Token{Type: token.EQ, Literal: literal}
+		} else {
+			tok = newToken(token.ASSIGN, l.currentChar)
+		}
+	case '+':
+		tok = newToken(token.PLUS, l.currentChar)
+	case '-':
+		tok = newToken(token.MINUS, l.currentChar)
+	case '!':
+		if l.peekChar() == '=' {
+			ch := l.currentChar
+			l.readChar()
+			literal := string(ch) + string(l.currentChar)
+			tok = token.Token{Type: token.NOT_EQ, Literal: literal}
+		} else {
+			tok = newToken(token.BANG, l.currentChar)
+		}
+	case '/':
+		tok = newToken(token.SLASH, l.currentChar)
+	case '*':
+		tok = newToken(token.ASTERISK, l.currentChar)
+	case '<':
+		tok = newToken(token.LT, l.currentChar)
+	case '>':
+		tok = newToken(token.GT, l.currentChar)
 	case ';':
 		tok = newToken(token.SEMICOLON, l.currentChar)
 	case '(':
@@ -38,8 +67,6 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.RPAREN, l.currentChar)
 	case ',':
 		tok = newToken(token.COMMA, l.currentChar)
-	case '+':
-		tok = newToken(token.PLUS, l.currentChar)
 	case '{':
 		tok = newToken(token.LBRACE, l.currentChar)
 	case '}':
@@ -96,6 +123,14 @@ func (l *Lexer) readChar() {
 	l.readPosition++
 }
 
+// Reads the next character without advancing the cursor to the next one
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	}
+	return l.input[l.readPosition]
+}
+
 /* ---------- HELPER FUNCTIONS ---------- */
 
 // Skips whitespaces, tabulation and new lines by ignoring them and advance the cursor
@@ -113,7 +148,7 @@ func isDigit(ch byte) bool {
 // Checks whether or not the byte is a letter based on the ASCII code
 // !! '_' is considered as a letter
 func isLetter(ch byte) bool {
-	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= '2' || ch == '_'
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
 }
 
 // Creates a Token object with the given fields
