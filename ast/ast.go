@@ -4,6 +4,14 @@ import "layng/token"
 
 /* ---------- SPECIFIC ---------- */
 
+type ExpressionStatement struct {
+	Token      token.Token
+	Expression Expression
+}
+
+func (es *ExpressionStatement) statementNode()       {}
+func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
+
 type ReturnStatement struct {
 	Token       token.Token
 	ReturnValue Expression
