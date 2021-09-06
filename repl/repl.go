@@ -6,7 +6,10 @@ import (
 	"io"
 	"layng/evaluator"
 	"layng/lexer"
+	"layng/object"
 	"layng/parser"
+
+	"github.com/fatih/color"
 )
 
 const PROMPT = ">> "
@@ -14,6 +17,8 @@ const EXIT = "exit"
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	errorColor := color.New(color.FgRed)
+	responseColor := color.New(color.FgCyan)
 
 	_, _ = fmt.Fprintf(out, "Type %s to leave\n\n", EXIT)
 
@@ -35,21 +40,25 @@ func Start(in io.Reader, out io.Writer) {
 
 		program := p.ParseProgram()
 		if len(p.Errors()) != 0 {
-			printParserErrors(out, p.Errors())
+			printParserErrors(out, errorColor, p.Errors())
 			continue
 		}
 
 		evaluated := evaluator.Eval(program)
 		if evaluated != nil {
-			_, _ = io.WriteString(out, evaluated.Inspect())
+			if _, isError := evaluated.(*object.Error); isError {
+				_, _ = errorColor.Fprintf(out, evaluated.Inspect())
+			} else {
+				_, _ = responseColor.Fprintf(out, evaluated.Inspect())
+			}
 			_, _ = io.WriteString(out, "\n")
 		}
 	}
 }
 
-func printParserErrors(out io.Writer, errors []string) {
-	_, _ = io.WriteString(out, " parser errors:\n")
+func printParserErrors(out io.Writer, errorColor *color.Color, errors []string) {
+	errorColor.Fprintf(out, " parser errors:\n")
 	for _, msg := range errors {
-		_, _ = io.WriteString(out, "\t"+msg+"\n")
+		_, _ = errorColor.Fprintf(out, "\t"+msg+"\n")
 	}
 }
