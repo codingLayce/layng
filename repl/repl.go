@@ -17,6 +17,8 @@ const EXIT = "exit"
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
+
 	errorColor := color.New(color.FgRed)
 	responseColor := color.New(color.FgCyan)
 
@@ -44,7 +46,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program)
+		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
 			if _, isError := evaluated.(*object.Error); isError {
 				_, _ = errorColor.Fprintf(out, evaluated.Inspect())
