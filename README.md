@@ -57,7 +57,7 @@ You can manipulate integers as you please. The supported operators are the follo
 - \* (Multiply)
 - / (Divide)
 
-```
+```bash
 >> 5 + 5
 10
 >> 5 - 4
@@ -70,7 +70,7 @@ You can manipulate integers as you please. The supported operators are the follo
 Notice that for now the division between 2 integers returns the floor value.
 
 Layng know how to prioritize operators between intergers, example:
-```
+```bash
 >> 5 + 2 * 10
 25
 >> (5 + 10 * 2 + 15 / 3) * 2 + -10
@@ -80,7 +80,7 @@ Layng know how to prioritize operators between intergers, example:
 ### Booleans
 You can manipulate booleans.
 
-```
+```bash
 >> true
 true
 >> false
@@ -90,7 +90,7 @@ false
 ### Comparators
 In Layng you can compare the built-in types (booleans and integers):
 
-```
+```bash
 >> 1 == 1
 true
 >> 1 != 1
@@ -116,8 +116,58 @@ Such as some modern languages, the if/else statement returns a value, example:
 2
 ```
 
+### Functions
+In Layng you can create functions and assign it to a variable in order to use it later.
+```bash
+>> let add = fn(x, y) {return x+y}
+>> add(1, 2)
+3
+```
+
+You can also use expression as argument:
+```bash
+>> let add = fn(x, y) {return x+y}
+>> add((5+5), 2)
+12
+```
+
+Or more complex one:
+```bash
+>> let add = fn(x, y) {return x+y}
+>> let sub = fn(x ,y) {return x-y}
+>> sub(add(1, 2), sub(10, 5))
+-2
+```
+
+It can handle recursivity:
+```bash
+>> let loop = fn(x) {if (x == 0) {return -1} else {return loop(x-1)}}
+>> loop(10)
+-1
+```
+Here the function is called 10 times before it actualy returns a value without making another call to itself.
+
+### Closures
+In Layng functions can return function, but more importantly they have separeted scopes and keep track over time of their own arguments.
+```bash
+>> let createAdder = fn(x) { return fn(y) { return x + y } }
+```
+Here we create a function `createAdder` that takes as argument the left value of the addition. Then it returns another function that is making the addition.
+
+```bash
+>> let addTwo = createAdder(2)
+```
+Here we are calling the `createAdder` function previously declared and store his result into addTwo. So at this point, the value of `addTwo` is `fn(y) { return 2 + y }`. Notice that the `x` identifier is now replaced by the value given as argument of `createAdder`.
+
+```bash
+>> addTwo(5)
+7
+>> addTwo(3)
+5
+```
+
 ### Return
-In Layng you can return values inside functions (not yet implemented) but also anywhere in your statements.
+In Layng you can return values inside functions but also anywhere in your statements.
 ```bash
 >> return 9; 10
 9
@@ -138,11 +188,12 @@ false
 - Support modulo operator
 - Support changing the value of a variable
 - Support and/or in comparators
+- For now, functions can only be assigned to variables `let add = fn(x, y) {return x+y}`, allow to create global function without assigning it to a variable `fn add(x, y) {return x+y}`
+- Make the language more typed (function explicitely return a type, variable cannot change their type on the fly)
 - Create better errors:
     - Display line number where the error occures
     - Display stack trace
 - Create switch statement
-- Create lambda expression
 - Create more readable big integers (100000000 could be write 100_000_000)
 - Create a simple standard library:
     - See what's missing in the Array/Hashes/Strings implementation
