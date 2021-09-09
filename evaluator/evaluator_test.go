@@ -8,6 +8,16 @@ import (
 )
 
 /* ---------- Global tests ---------- */
+func TestReassign(t *testing.T) {
+	input := `
+		let a = 1;
+		a = 2;
+		a
+	`
+
+	testIntegerObject(t, testEval(input), 2)
+}
+
 func TestClosures(t *testing.T) {
 	input := `
 	let newAdder = fn(x) {
@@ -123,6 +133,10 @@ if (10 > 1) {
 		{
 			"foobar",
 			"identifier not found: foobar",
+		},
+		{
+			"a = 1",
+			"identifier not found: a",
 		},
 	}
 

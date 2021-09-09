@@ -89,12 +89,28 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 
 		return applyFunction(function, args)
+
+	case *ast.ReassinStatement:
+		return evalReassignStatement(node, env)
 	}
 
 	return nil
 }
 
 /* ---------- INTERNAL EVAL ---------- */
+func evalReassignStatement(node *ast.ReassinStatement, env *object.Environment) object.Object {
+	val := Eval(node.Value, env)
+	if isError(val) {
+		return val
+	}
+
+	if !env.Reassign(node.Name.Value, val) {
+		return newError("identifier not found: " + node.Name.Value)
+	}
+
+	return nil
+}
+
 func applyFunction(fn object.Object, args []object.Object) object.Object {
 	function, ok := fn.(*object.Function)
 	if !ok {

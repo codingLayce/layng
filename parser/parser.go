@@ -80,7 +80,6 @@ func New(l *lexer.Lexer) *Parser {
 }
 
 /* ---------- PREFIX PARSE FUNCTIONS ---------- */
-
 func (p *Parser) parseFunctionLiteral() ast.Expression {
 	lit := &ast.FunctionLiteral{Token: p.curToken}
 
@@ -205,6 +204,21 @@ func (p *Parser) parseIfExpression() ast.Expression {
 }
 
 /* ---------- INFIX PARSE FUNCTIONS ---------- */
+func (p *Parser) parseReassignVariable() *ast.ReassinStatement {
+	stmt := &ast.ReassinStatement{Token: token.Token{Type: token.REASSIGN, Literal: "reassign"}}
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	p.nextToken()
+	p.nextToken()
+
+	stmt.Value = p.parseExpression(LOWEST)
+
+	for p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
 
 func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
 	exp := &ast.CallExpression{Token: p.curToken, Function: function}
@@ -314,9 +328,7 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
 		stmt := p.parseStatement()
-		if stmt != nil {
-			block.Statements = append(block.Statements, stmt)
-		}
+		block.Statements = append(block.Statements, stmt)
 		p.nextToken()
 	}
 
@@ -341,6 +353,11 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseLetStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
+	case token.IDENT:
+		if p.peekTokenIs(token.ASSIGN) {
+			return p.parseReassignVariable()
+		}
+		return p.parseExpressionStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -352,9 +369,7 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 	for !p.curTokenIs(token.EOF) {
 		statement := p.parseStatement()
-		if statement != nil {
-			program.Statements = append(program.Statements, statement)
-		}
+		program.Statements = append(program.Statements, statement)
 		p.nextToken()
 	}
 

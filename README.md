@@ -2,13 +2,16 @@
 
 Layng is a language written in Go, based on the book "Writing An Interpreter In Go" by Thorsten Ball.
 
-I use it to keep playing with Go and learn how a simple language could work.
+I'am making it to keep playing with Go (because I really like with language) and learn how a simple language could work.
 
 For now the language is only interpretable in a REPL.
 
-## Run REPL
+## Install and Run REPL
 ```
-go run main.go
+git clone https://github.com/codingLayce/layng.git
+go mod download
+go build
+./layng
 ```
 
 ## Features Implemented
@@ -23,31 +26,19 @@ You can store values inside variables.
 >> b
 5
 ```
-For now, when you do `let b = a` b isn't referencing a, it copies the value of a into b.
+The language variables are only passed as value, so if you assign a to b and then modify a, the value of b will still be the a value before the modification.
 ```bash
 >> let a = 1
 >> let b = a
 >> b
 1
->> let a = 2
+>> a = 2
 >> a
 2
 >> b
 1
 ```
-
-For now, you cannot change the value of a variable `a = 6` will throw an error. But you can override the previous variable:
-```
->> let a = 6
->> a
-6
->> a = 5
-parser errors:
-    no prefix parse function for = found
->> let a = 5
->> a
-5
-```
+> Notice that you can reassign a new value to a variable with the statement `a = 2`.
 
 
 ### Integers
@@ -183,17 +174,17 @@ For more readability, you can explicitly indicates what a if/else statement is r
 false
 ```
 
-## Features To Come
-- Support floating point numbers
-- Support modulo operator
-- Support changing the value of a variable
-- Support and/or in comparators
-- For now, functions can only be assigned to variables `let add = fn(x, y) {return x+y}`, allow to create global function without assigning it to a variable `fn add(x, y) {return x+y}`
-- Make the language more typed (function explicitely return a type, variable cannot change their type on the fly)
+## My Own Features Implemented
+- [ ] Support floating point numbers
+- [ ] Support modulo operator
+- [x] Support changing the value of a variable
+- [ ] Support and/or in comparators
+- [ ] For now, functions can only be assigned to variables `let add = fn(x, y) {return x+y}`, allow to create global function without assigning it to a variable `fn add(x, y) {return x+y}`
+- [ ] Make the language more typed (function explicitely return a type, variable cannot change their type on the fly)
 - Create better errors:
-    - Display line number where the error occures
-    - Display stack trace
-- Create switch statement
-- Create more readable big integers (100000000 could be write 100_000_000)
+    - [ ] Display line number where the error occures
+    - [ ] Display stack trace
+- [ ] Create switch statement
+- [ ] Create more readable big integers (100000000 could be write 100_000_000)
 - Create a simple standard library:
-    - See what's missing in the Array/Hashes/Strings implementation
+    - [ ] See what's missing in the Array/Hashes/Strings implementation

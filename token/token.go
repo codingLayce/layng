@@ -34,6 +34,7 @@ const (
 
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
+	REASSIGN = "REASSIGN"
 	TRUE     = "TRUE"
 	FALSE    = "FALSE"
 	IF       = "IF"

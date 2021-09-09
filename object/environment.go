@@ -28,6 +28,15 @@ func NewEnvironment() *Environment {
 	return &Environment{store: s, outer: nil}
 }
 
+func (e *Environment) Reassign(name string, val Object) bool {
+	if _, ok := e.store[name]; !ok {
+		return false
+	}
+	e.store[name] = val
+
+	return true
+}
+
 func (e *Environment) Get(name string) (Object, bool) {
 	obj, ok := e.store[name]
 	if !ok && e.outer != nil {

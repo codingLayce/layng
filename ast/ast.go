@@ -8,13 +8,31 @@ import (
 
 /* ---------- SPECIFIC ---------- */
 
+type ReassinStatement struct {
+	Token token.Token
+	Name  *Identifier
+	Value Expression
+}
+
+func (rs *ReassinStatement) statementNode()       {}
+func (rs *ReassinStatement) TokenLiteral() string { return rs.Token.Literal }
+func (rs *ReassinStatement) String() string {
+	var out bytes.Buffer
+
+	out.WriteString(rs.Name.String())
+	out.WriteString(" = ")
+	out.WriteString(rs.Value.String())
+
+	return out.String()
+}
+
 type CallExpression struct {
 	Token     token.Token
 	Function  Expression
 	Arguments []Expression
 }
 
-func (ce *CallExpression) expressionNode() {}
+func (ce *CallExpression) expressionNode()      {}
 func (ce *CallExpression) TokenLiteral() string { return ce.Token.Literal }
 func (ce *CallExpression) String() string {
 	var out bytes.Buffer
