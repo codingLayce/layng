@@ -16,7 +16,7 @@ func TestBuiltinFunctions(t *testing.T) {
 		{`len("")`, 0},
 		{`len("four")`, 4},
 		{`len("hello world")`, 11},
-		{`len(1)`, "argument to `len` not supported, got INTEGER"},
+		{`len(1)`, "argument to `len` not supported, got {INTEGER}"},
 		{`len("one", "two")`, "wrong number of arguments. got=2, want=1"},
 	}
 
@@ -40,7 +40,7 @@ func TestBuiltinFunctions(t *testing.T) {
 }
 
 func TestStringConcatenation(t *testing.T) {
-	input := `"Hello" + " " + "World"`
+	input := `"Hello" .. " " .. "World"`
 
 	evaluated := testEval(input)
 	str, ok := evaluated.(*object.String)
@@ -155,27 +155,27 @@ func TestErrorHandling(t *testing.T) {
 	}{
 		{
 			"5 + true;",
-			"type mismatch: INTEGER + BOOLEAN",
+			"type mismatch: {INTEGER} + {BOOLEAN}",
 		},
 		{
 			"5 + true; 5;",
-			"type mismatch: INTEGER + BOOLEAN",
+			"type mismatch: {INTEGER} + {BOOLEAN}",
 		},
 		{
 			"-true",
-			"unknown operator: -BOOLEAN",
+			"unknown operator: -{BOOLEAN}",
 		},
 		{
 			"true + false",
-			"unknown operator: BOOLEAN + BOOLEAN",
+			"unknown operator: {BOOLEAN} + {BOOLEAN}",
 		},
 		{
 			"5; true + false; 5",
-			"unknown operator: BOOLEAN + BOOLEAN",
+			"unknown operator: {BOOLEAN} + {BOOLEAN}",
 		},
 		{
 			"if (10 > 1) { true + false; }",
-			"unknown operator: BOOLEAN + BOOLEAN",
+			"unknown operator: {BOOLEAN} + {BOOLEAN}",
 		},
 		{
 			`
@@ -187,7 +187,7 @@ if (10 > 1) {
   return 1;
 }
 `,
-			"unknown operator: BOOLEAN + BOOLEAN",
+			"unknown operator: {BOOLEAN} + {BOOLEAN}",
 		},
 		{
 			"foobar",
@@ -195,11 +195,11 @@ if (10 > 1) {
 		},
 		{
 			"a = 1",
-			"identifier not found: a",
+			"unknown variable: a",
 		},
 		{
 			`"Hello" - "World"`,
-			"unknown operator: STRING - STRING",
+			"unknown operator: {STRING} - {STRING}",
 		},
 	}
 

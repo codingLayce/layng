@@ -40,6 +40,18 @@ The language variables are only passed as value, so if you assign a to b and the
 ```
 > Notice that you can reassign a new value to a variable with the statement `a = 2`.
 
+### Strings
+You can manipulate string as you please.
+```bash
+>> let a = "John"
+>> a
+John
+>> let b = "Smith"
+>> let c = a .. " " .. b
+>> c
+John Smith
+```
+> You can notice that string concatenation works with a double dot
 
 ### Integers
 You can manipulate integers as you please. The supported operators are the following:
@@ -191,16 +203,91 @@ Example:
 9
 ```
 
+#### _string_
+Description: Convert etiher a boolean or an integer into a string
+
+Arguments: Object (BOOLEAN, INTEGER)
+
+Return: string
+
+Example:
+```bash
+>> string(42)
+42
+>> string(false)
+false
+>> let age = 21
+>> string(age)
+21
+>> "Mon age: " + 21
+Error: type mismatch: STRING + INTEGER
+>> "Mon age: " + string(21)
+Mon age: 21
+```
+
+#### _int_
+Description: Convert a string into an int
+
+Arguments: string
+
+Return: int
+
+Example:
+```bash
+>> int("42")
+42
+>> let a = "21"
+>> int(a)
+21
+```
+
+#### _bool_
+Description: Convert a string into a boolean
+
+Arguments: string
+
+Return: boolean
+
+Example:
+```bash
+>> bool("true")
+true
+>> let a = "false"
+>> int(a)
+false
+```
+
+#### _type_
+Description: Return the type of the given expression
+
+Arguments: Object
+
+Return: string
+
+Example:
+```bash
+>> type("test")
+STRING
+>> type(42)
+INTEGER
+>> type(false)
+BOOLEAN
+```
+
 ## My Own Features Implemented
 - [ ] Support floating point numbers
 - [ ] Support modulo operator
 - [x] Support changing the value of a variable. `let a = 1; a = 2` the value of a is now 2. `b = 2` will throw an error because b isn't defined.
+- [x] Pohibit changing the type of a variable. `let a = 1; a = "Bonjour"` shouldn't be possible.
 - [ ] Support and/or in comparators
 - [ ] Support elseif in conditions
 - [ ] Support escaping character in string
 - [ ] Support loop (for/while or a combined one)
+- [ ] Support enum
+- [ ] Support struct
+- [x] Add convertion between types with builtin functions `string`, `int`, `bool`
+- [x] Add builtin function to return the type of a given expression: `type`
 - [ ] For now, functions can only be assigned to variables `let add = fn(x, y) {return x+y}`, allow to create global function without assigning it to a variable `fn add(x, y) {return x+y}`
-- [ ] Make the language more typed (function explicitely return a type, variable cannot change their type on the fly)
 - Create better errors:
     - [ ] Display line number where the error occures
     - [ ] Display stack trace

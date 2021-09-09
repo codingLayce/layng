@@ -27,7 +27,8 @@ if (5 < 10) {
 10 == 10;
 10 != 9;
 "foobar"
-"foo bar"`
+"foo bar"
+"foo" .. "bar"`
 
 	tests := []struct {
 		expectedType    token.TokenType
@@ -108,6 +109,9 @@ if (5 < 10) {
 		{token.SEMICOLON, ";"},
 		{token.STRING, "foobar"},
 		{token.STRING, "foo bar"},
+		{token.STRING, "foo"},
+		{token.STRING_CONCAT, ".."},
+		{token.STRING, "bar"},
 		{token.EOF, ""},
 	}
 

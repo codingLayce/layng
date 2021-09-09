@@ -74,6 +74,15 @@ func (l *Lexer) NextToken() token.Token {
 	case '"':
 		tok.Type = token.STRING
 		tok.Literal = l.readString()
+	case '.':
+		if l.peekChar() == '.' {
+			ch := l.currentChar
+			l.readChar()
+			literal := string(ch) + string(l.currentChar)
+			tok = token.Token{Type: token.STRING_CONCAT, Literal: literal}
+		} else {
+			tok = newToken(token.ILLEGAL, l.currentChar)
+		}
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF

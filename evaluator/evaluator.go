@@ -107,8 +107,8 @@ func evalReassignStatement(node *ast.ReassinStatement, env *object.Environment) 
 		return val
 	}
 
-	if !env.Reassign(node.Name.Value, val) {
-		return newError("identifier not found: " + node.Name.Value)
+	if err := env.Reassign(node.Name.Value, val); err != nil {
+		return newError(err.Error())
 	}
 
 	return nil
@@ -226,7 +226,7 @@ func evalInfixExpression(operator string, left object.Object, right object.Objec
 	}
 }
 func evalStringInfixExpression(operator string, left, right object.Object) object.Object {
-	if operator != "+" {
+	if operator != ".." {
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	}
 

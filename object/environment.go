@@ -28,13 +28,18 @@ func NewEnvironment() *Environment {
 	return &Environment{store: s, outer: nil}
 }
 
-func (e *Environment) Reassign(name string, val Object) bool {
+func (e *Environment) Reassign(name string, val Object) error {
 	if _, ok := e.store[name]; !ok {
-		return false
+		return &errUnknownVariable{Name: name}
 	}
+
+	if e.store[name].Type() != val.Type() {
+		return &errDifferentType{Base: e.store[name].Type(), Wanted: val.Type()}
+	}
+
 	e.store[name] = val
 
-	return true
+	return nil
 }
 
 func (e *Environment) Get(name string) (Object, bool) {

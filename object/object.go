@@ -7,18 +7,21 @@ import (
 	"strings"
 )
 
-type Type string
+type Type struct {
+	String string
+}
+
 type BuiltinFunction func(args ...Object) Object
 
-const (
-	IntegerObj     = "INTEGER"
-	BooleanObj     = "BOOLEAN"
-	NullObj        = "NULL"
-	ReturnValueObj = "RETURN_VALUE"
-	ErrorObj       = "ERROR"
-	FunctionObj    = "FUNCTION"
-	StringObj      = "STRING"
-	BuiltinObj     = "BUILTIN"
+var (
+	IntegerObj     = Type{String: "INTEGER"}
+	BooleanObj     = Type{String: "BOOLEAN"}
+	NullObj        = Type{String: "NULL"}
+	ReturnValueObj = Type{String: "RETURN_VALUE"}
+	ErrorObj       = Type{String: "ERROR"}
+	FunctionObj    = Type{String: "FUNCTION"}
+	StringObj      = Type{String: "STRING"}
+	BuiltinObj     = Type{String: "BUILTIN"}
 )
 
 type Object interface {

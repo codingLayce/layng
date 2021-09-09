@@ -25,6 +25,8 @@ const (
 	EQ     = "=="
 	NOT_EQ = "!="
 
+	STRING_CONCAT = ".."
+
 	COMMA     = ","
 	SEMICOLON = ";"
 
