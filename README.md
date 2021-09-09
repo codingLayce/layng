@@ -177,8 +177,10 @@ false
 ## My Own Features Implemented
 - [ ] Support floating point numbers
 - [ ] Support modulo operator
-- [x] Support changing the value of a variable
+- [x] Support changing the value of a variable. `let a = 1; a = 2` the value of a is now 2. `b = 2` will throw an error because b isn't defined.
 - [ ] Support and/or in comparators
+- [ ] Support elseif in conditions
+- [ ] Support escaping character in string
 - [ ] For now, functions can only be assigned to variables `let add = fn(x, y) {return x+y}`, allow to create global function without assigning it to a variable `fn add(x, y) {return x+y}`
 - [ ] Make the language more typed (function explicitely return a type, variable cannot change their type on the fly)
 - Create better errors:

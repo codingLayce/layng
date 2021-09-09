@@ -8,8 +8,9 @@ const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
 
-	IDENT = "IDENT" // var names, func names
-	INT   = "INT"   // 1234
+	IDENT  = "IDENT" // var names, func names
+	INT    = "INT"   // 1234
+	STRING = "STRING"
 
 	ASSIGN   = "="
 	PLUS     = "+"

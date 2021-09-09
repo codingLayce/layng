@@ -92,6 +92,9 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.ReassinStatement:
 		return evalReassignStatement(node, env)
+
+	case *ast.StringLiteral:
+		return &object.String{Value: node.Value}
 	}
 
 	return nil
@@ -202,6 +205,8 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 
 func evalInfixExpression(operator string, left object.Object, right object.Object) object.Object {
 	switch {
+	case left.Type() == object.StringObj && right.Type() == object.StringObj:
+		return evalStringInfixExpression(operator, left, right)
 	case left.Type() == object.IntegerObj && right.Type() == object.IntegerObj:
 		return evalIntegerInfixExpression(operator, left, right)
 	case operator == "==": // It works because True and False are preallocated so pointer comparison are ok. But only works for boolean comparison
@@ -213,6 +218,15 @@ func evalInfixExpression(operator string, left object.Object, right object.Objec
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	}
+}
+func evalStringInfixExpression(operator string, left, right object.Object) object.Object {
+	if operator != "+" {
+		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
+	}
+
+	leftVal := left.(*object.String).Value
+	rightVal := right.(*object.String).Value
+	return &object.String{Value: leftVal + rightVal}
 }
 
 func evalIntegerInfixExpression(operator string, left, right object.Object) object.Object {
