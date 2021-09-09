@@ -181,6 +181,7 @@ false
 - [ ] Support and/or in comparators
 - [ ] Support elseif in conditions
 - [ ] Support escaping character in string
+- [ ] Support loop (for/while or a combined one)
 - [ ] For now, functions can only be assigned to variables `let add = fn(x, y) {return x+y}`, allow to create global function without assigning it to a variable `fn add(x, y) {return x+y}`
 - [ ] Make the language more typed (function explicitely return a type, variable cannot change their type on the fly)
 - Create better errors:
