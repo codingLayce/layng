@@ -174,6 +174,23 @@ For more readability, you can explicitly indicates what a if/else statement is r
 false
 ```
 
+### Builtin functions
+#### _len_
+Description: Return the number of characters of the given string
+
+Arguments: string
+
+Return: int
+
+Example: 
+```bash
+>> len("four")
+4
+>> let a = "Bonjour !"
+>> len(a)
+9
+```
+
 ## My Own Features Implemented
 - [ ] Support floating point numbers
 - [ ] Support modulo operator
